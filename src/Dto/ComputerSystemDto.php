@@ -4,7 +4,9 @@ declare(strict_types=1);
 
 namespace Flux\VerifactuBundle\Dto;
 
-final readonly class ComputerSystemDto
+use Flux\VerifactuBundle\Contract\ComputerSystemInterface;
+
+final readonly class ComputerSystemDto implements ComputerSystemInterface
 {
     public function __construct(
         private string $vendorName,
