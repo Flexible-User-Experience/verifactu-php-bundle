@@ -5,15 +5,22 @@ declare(strict_types=1);
 namespace Flux\VerifactuBundle\Dto;
 
 use Flux\VerifactuBundle\Contract\ComputerSystemInterface;
+use Symfony\Component\Validator\Constraints as Assert;
 
 final readonly class ComputerSystemDto implements ComputerSystemInterface
 {
     public function __construct(
+        #[Assert\NotBlank]
         private string $vendorName,
+        #[Assert\NotBlank]
         private string $vendorNif,
+        #[Assert\NotBlank]
         private string $name,
+        #[Assert\NotBlank]
         private string $id,
+        #[Assert\NotBlank]
         private string $version,
+        #[Assert\NotBlank]
         private string $installationNumber,
         private bool $onlySupportsVerifactu,
         private bool $supportsMultipleTaxpayers,
