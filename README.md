@@ -11,5 +11,5 @@ VerifactuBundle requires PHP 8.2 or higher and Symfony 6.4 or higher. Run the
 following command to install it in your application:
 
 ```bash
-composer require flux/verifactu-php-bundle
+composer require flux/verifactu-bundle
 ```
