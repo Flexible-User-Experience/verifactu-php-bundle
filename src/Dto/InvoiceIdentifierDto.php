@@ -17,7 +17,7 @@ final readonly class InvoiceIdentifierDto implements InvoiceIdentifierInterface
         #[Assert\Length(max: 60)]
         private string $invoiceNumber,
         #[Assert\NotBlank]
-        private \DateTimeInterface $issueDate
+        private \DateTimeInterface $issueDate,
     ) {
     }
 

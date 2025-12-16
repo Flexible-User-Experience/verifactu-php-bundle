@@ -14,7 +14,7 @@ abstract readonly class BaseFactory
     }
 
     /**
-     * Trim & Truncate
+     * Trim & Truncate.
      */
     protected function tt(string $value, int $maxLength = 120): string
     {
