@@ -21,6 +21,32 @@ following command to install it in your application:
 composer require flux/verifactu-bundle
 ```
 
+### Configure the bundle in your `config/packages/flux_verifactu.yaml` file:
+
+```yaml
+flux_verifactu:
+    is_prod_environment: false # only set to true to make AEAT real API calls, be careful here
+```
+
+## Usage
+
+### `TestHandler` Service (WIP, for now is a Proof-Of-Concept)
+
+You can inject the `TestHandler` service in your app.
+
+```php
+use Flux\VerifactuBundle\Handler\TestHandler;
+
+class AppTestController
+{
+    public function test(TestHandler $testHandler)
+    {
+        $testHandler->getTest(); // returns 'true' or 'false' as string (depending on your is_prod_environment configuration)
+        // ...
+    }
+}
+```
+
 Code Style
 ----------
 
