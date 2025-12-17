@@ -22,5 +22,8 @@ final class FluxVerifactuBundle extends AbstractBundle
     public function loadExtension(array $config, ContainerConfigurator $container, ContainerBuilder $builder): void
     {
         $container->import('../config/services.php');
+        $builder->getDefinition('flux_verifactu.test_handler')
+            ->setArgument(0, $config['is_prod_environment'])
+        ;
     }
 }
