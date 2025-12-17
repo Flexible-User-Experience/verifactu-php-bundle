@@ -35,7 +35,7 @@ final readonly class RegistrationRecordDto implements RegistrationRecordInterfac
         private string $issuerName,
         #[Assert\NotBlank]
         private InvoiceType $invoiceType,
-        private \DateTimeInterface $operationDate,
+        private ?\DateTimeInterface $operationDate,
         #[Assert\NotBlank]
         #[Assert\Length(max: 500)]
         private string $description,
