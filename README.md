@@ -25,7 +25,7 @@ composer require flux/verifactu-bundle
 
 ```yaml
 flux_verifactu:
-    is_prod_environment: false # only set to true to make AEAT real API calls, be careful here
+    is_prod_environment: false # only set to true to make real AEAT API calls, be careful here
 ```
 
 ## Usage
