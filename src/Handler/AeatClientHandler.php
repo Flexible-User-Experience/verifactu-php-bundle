@@ -14,9 +14,10 @@ use Flux\VerifactuBundle\Factory\FiscalIdentifierFactory;
 final readonly class AeatClientHandler
 {
     public function __construct(
+        private array $aeatClientConfig,
         private array $computerSystemConfig,
-        private ComputerSystemFactory $computerSystemFactory,
         private array $fiscalIdentifierConfig,
+        private ComputerSystemFactory $computerSystemFactory,
         private FiscalIdentifierFactory $fiscalIdentifierFactory,
     ) {
     }

@@ -25,7 +25,10 @@ composer require flux/verifactu-bundle
 
 ```yaml
 flux_verifactu:
-    is_prod_environment: false # only set to true to make real AEAT API calls, be careful here
+    aeat_client:
+        is_prod_environment: false # only set to true to make real AEAT API calls, be careful here
+        pfx_certificate_filepath: '%your_pfx_certificate_filepath%'
+        pfx_certificate_password: '%pfx_certificate_password%'
     # SIF (developer) credentials
     computer_system:
         vendor_name: '%your_vendor_name%'

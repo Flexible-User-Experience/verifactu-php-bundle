@@ -14,9 +14,10 @@ return static function (ContainerConfigurator $container): void {
     $container->services()
         ->set('flux_verifactu.aeat_client_handler', AeatClientHandler::class)
             ->args([
+                abstract_arg(FluxVerifactuBundle::AEAT_CLIENT_KEY),
                 abstract_arg(FluxVerifactuBundle::COMPUTER_SYSTEM_CONFIG_KEY),
-                service(ComputerSystemFactory::class),
                 abstract_arg(FluxVerifactuBundle::FISCAL_IDENTIFIER_CONFIG_KEY),
+                service(ComputerSystemFactory::class),
                 service(FiscalIdentifierFactory::class),
             ])
         ->alias(AeatClientHandler::class, 'flux_verifactu.aeat_client_handler')
