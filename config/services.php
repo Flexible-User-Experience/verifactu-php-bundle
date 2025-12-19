@@ -6,6 +6,7 @@ namespace Symfony\Component\DependencyInjection\Loader\Configurator;
 
 use Flux\VerifactuBundle\Factory\ComputerSystemFactory;
 use Flux\VerifactuBundle\Factory\FiscalIdentifierFactory;
+use Flux\VerifactuBundle\Factory\RegistrationRecordFactory;
 use Flux\VerifactuBundle\FluxVerifactuBundle;
 use Flux\VerifactuBundle\Handler\AeatClientHandler;
 
@@ -16,6 +17,7 @@ return static function (ContainerConfigurator $container): void {
                 abstract_arg(FluxVerifactuBundle::AEAT_CLIENT_KEY),
                 abstract_arg(FluxVerifactuBundle::COMPUTER_SYSTEM_CONFIG_KEY),
                 abstract_arg(FluxVerifactuBundle::FISCAL_IDENTIFIER_CONFIG_KEY),
+                service(RegistrationRecordFactory::class),
                 service(ComputerSystemFactory::class),
                 service(FiscalIdentifierFactory::class),
             ])
@@ -35,5 +37,12 @@ return static function (ContainerConfigurator $container): void {
                 service('validator'),
             ])
         ->alias(FiscalIdentifierFactory::class, 'flux_verifactu.fiscal_identifier_factory')
+    ;
+    $container->services()
+        ->set('flux_verifactu.registration_record_factory', RegistrationRecordFactory::class)
+            ->args([
+                service('validator'),
+            ])
+        ->alias(RegistrationRecordFactory::class, 'flux_verifactu.registration_record_factory')
     ;
 };

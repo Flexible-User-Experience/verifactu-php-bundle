@@ -6,10 +6,14 @@ namespace Flux\VerifactuBundle\Handler;
 
 use Flux\VerifactuBundle\Contract\ComputerSystemInterface;
 use Flux\VerifactuBundle\Contract\FiscalIdentifierInterface;
+use Flux\VerifactuBundle\Contract\RegistrationRecordInterface;
 use Flux\VerifactuBundle\Dto\ComputerSystemDto;
 use Flux\VerifactuBundle\Dto\FiscalIdentifierDto;
+use Flux\VerifactuBundle\Dto\RegistrationRecordDto;
 use Flux\VerifactuBundle\Factory\ComputerSystemFactory;
 use Flux\VerifactuBundle\Factory\FiscalIdentifierFactory;
+use Flux\VerifactuBundle\Factory\RegistrationRecordFactory;
+use josemmo\Verifactu\Models\Responses\ResponseStatus;
 use josemmo\Verifactu\Services\AeatClient;
 
 final readonly class AeatClientHandler
@@ -18,18 +22,28 @@ final readonly class AeatClientHandler
         private array $aeatClientConfig,
         private array $computerSystemConfig,
         private array $fiscalIdentifierConfig,
+        private RegistrationRecordFactory $registrationRecordFactory,
         private ComputerSystemFactory $computerSystemFactory,
         private FiscalIdentifierFactory $fiscalIdentifierFactory,
     ) {
     }
 
-    public function getTest(): string
+    public function getTest(RegistrationRecordDto $dto): string
     {
+        $validatedRegistrationRecord = $this->getValidatedRegistrationRecordFromDto($dto);
         $validatedComputerSystem = $this->getValidatedComputerSystem();
         $validatedFiscalIdentifier = $this->getValidatedFiscalIdentifier();
         $aeatClient = $this->buildAeatClientWithSystemAndTaxpayer($validatedComputerSystem, $validatedFiscalIdentifier);
+        $aeatResponse = $aeatClient->send([
+            $this->registrationRecordFactory->transformDtoToModel($validatedRegistrationRecord)
+        ])->wait();
 
-        return $validatedComputerSystem->getName().' - '.$validatedFiscalIdentifier->getNif();
+        return $aeatResponse->status === ResponseStatus::Correct ? 'OK' : 'KO';
+    }
+
+    private function getValidatedRegistrationRecordFromDto(RegistrationRecordDto $dto): RegistrationRecordInterface
+    {
+        return $this->registrationRecordFactory->create($dto);
     }
 
     private function getValidatedComputerSystem(): ComputerSystemInterface
