@@ -20,6 +20,13 @@ return static function (ContainerConfigurator $container): void {
         ->public()
     ;
     $container->services()
+        ->set('flux_verifactu.computer_system_factory', ComputerSystemFactory::class)
+            ->args([
+                service('validator.builder'),
+            ])
+        ->alias(ComputerSystemFactory::class, 'flux_verifactu.computer_system_factory')
+    ;
+    $container->services()
         ->set('flux_verifactu.test_handler', TestHandler::class)
             ->args([
                 abstract_arg(FluxVerifactuBundle::IS_PROD_ENVIRONMENT_CONFIG_KEY),
