@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Symfony\Component\DependencyInjection\Loader\Configurator;
 
 use Flux\VerifactuBundle\Factory\ComputerSystemFactory;
+use Flux\VerifactuBundle\Factory\FiscalIdentifierFactory;
 use Flux\VerifactuBundle\FluxVerifactuBundle;
 use Flux\VerifactuBundle\Handler\AeatClientHandler;
 use Flux\VerifactuBundle\Handler\TestHandler;
@@ -15,6 +16,8 @@ return static function (ContainerConfigurator $container): void {
             ->args([
                 abstract_arg(FluxVerifactuBundle::COMPUTER_SYSTEM_CONFIG_KEY),
                 service(ComputerSystemFactory::class),
+                abstract_arg(FluxVerifactuBundle::FISCAL_IDENTIFIER_CONFIG_KEY),
+                service(FiscalIdentifierFactory::class),
             ])
         ->alias(AeatClientHandler::class, 'flux_verifactu.aeat_client_handler')
         ->public()
@@ -25,6 +28,13 @@ return static function (ContainerConfigurator $container): void {
                 service('validator'),
             ])
         ->alias(ComputerSystemFactory::class, 'flux_verifactu.computer_system_factory')
+    ;
+    $container->services()
+        ->set('flux_verifactu.fiscal_identifier_factory', FiscalIdentifierFactory::class)
+            ->args([
+                service('validator'),
+            ])
+        ->alias(FiscalIdentifierFactory::class, 'flux_verifactu.fiscal_identifier_factory')
     ;
     $container->services()
         ->set('flux_verifactu.test_handler', TestHandler::class)
