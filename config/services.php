@@ -8,7 +8,6 @@ use Flux\VerifactuBundle\Factory\ComputerSystemFactory;
 use Flux\VerifactuBundle\Factory\FiscalIdentifierFactory;
 use Flux\VerifactuBundle\FluxVerifactuBundle;
 use Flux\VerifactuBundle\Handler\AeatClientHandler;
-use Flux\VerifactuBundle\Handler\TestHandler;
 
 return static function (ContainerConfigurator $container): void {
     $container->services()
@@ -36,13 +35,5 @@ return static function (ContainerConfigurator $container): void {
                 service('validator'),
             ])
         ->alias(FiscalIdentifierFactory::class, 'flux_verifactu.fiscal_identifier_factory')
-    ;
-    $container->services()
-        ->set('flux_verifactu.test_handler', TestHandler::class)
-            ->args([
-                abstract_arg(FluxVerifactuBundle::IS_PROD_ENVIRONMENT_CONFIG_KEY),
-            ])
-        ->alias(TestHandler::class, 'flux_verifactu.test_handler')
-        ->public()
     ;
 };
