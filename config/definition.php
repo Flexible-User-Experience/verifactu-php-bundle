@@ -25,9 +25,9 @@ return static function (DefinitionConfigurator $definition): void {
                     ->stringNode('id')->isRequired()->end()
                     ->stringNode('version')->isRequired()->end()
                     ->stringNode('installation_number')->isRequired()->end()
-                    ->booleanNode('only_supports_verifactu')->isRequired()->end()
-                    ->booleanNode('supports_multiple_taxpayers')->isRequired()->end()
-                    ->booleanNode('has_multiple_taxpayers')->isRequired()->end()
+                    ->booleanNode('only_supports_verifactu')->defaultValue(false)->isRequired()->end()
+                    ->booleanNode('supports_multiple_taxpayers')->defaultValue(false)->isRequired()->end()
+                    ->booleanNode('has_multiple_taxpayers')->defaultValue(false)->isRequired()->end()
                 ->end()
         ->end()
     ;
