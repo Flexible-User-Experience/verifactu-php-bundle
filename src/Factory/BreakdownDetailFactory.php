@@ -6,17 +6,11 @@ namespace Flux\VerifactuBundle\Factory;
 
 use Flux\VerifactuBundle\Contract\BreakdownDetailInterface;
 use Flux\VerifactuBundle\Dto\BreakdownDetailDto;
-use Symfony\Component\Validator\Exception\ValidationFailedException;
 
-final readonly class BreakdownDetailFactory extends BaseFactory
+final readonly class BreakdownDetailFactory
 {
     public function create(BreakdownDetailInterface $input): BreakdownDetailInterface
     {
-        $violations = $this->validator->validate($input);
-        if (\count($violations) > 0) {
-            throw new ValidationFailedException($input, $violations);
-        }
-
         return new BreakdownDetailDto(
             taxType: $input->getTaxType(),
             regimeType: $input->getRegimeType(),

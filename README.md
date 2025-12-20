@@ -25,7 +25,25 @@ composer require flux/verifactu-bundle
 
 ```yaml
 flux_verifactu:
-    is_prod_environment: false # only set to true to make real AEAT API calls, be careful here
+    aeat_client:
+        is_prod_environment: false # only set to true to make real AEAT API calls, be careful here
+        pfx_certificate_filepath: '%your_pfx_certificate_filepath%'
+        pfx_certificate_password: '%pfx_certificate_password%'
+    # SIF (developer) credentials
+    computer_system:
+        vendor_name: '%your_vendor_name%'
+        vendor_nif: '%your_vendor_nif%' # 9 digits (Spanish NIF or CIF)
+        name: '%your_name%'
+        id: 'ID' # only 2 letters
+        version: '%your_version%'
+        installation_number: '%your_installation_number%'
+        only_supports_verifactu: false
+        supports_multiple_taxpayers: false
+        has_multiple_taxpayers: false
+    # Taxpayer credentials
+    fiscal_identifier:
+        name: '%your_name%'
+        nif: '%your_nif%' # 9 digits (Spanish NIF or CIF)
 ```
 
 ## Usage
@@ -52,6 +70,13 @@ Code Style
 
 ```shell
 php ./vendor/bin/php-cs-fixer fix src/
+```
+
+Code Analysis
+-------------
+
+```shell
+php ./vendor/bin/phpstan analyse
 ```
 
 Testing

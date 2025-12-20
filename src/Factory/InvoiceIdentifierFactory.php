@@ -6,20 +6,15 @@ namespace Flux\VerifactuBundle\Factory;
 
 use Flux\VerifactuBundle\Contract\InvoiceIdentifierInterface;
 use Flux\VerifactuBundle\Dto\InvoiceIdentifierDto;
-use Symfony\Component\Validator\Exception\ValidationFailedException;
+use Flux\VerifactuBundle\Validator\ContractsValidator;
 
-final readonly class InvoiceIdentifierFactory extends BaseFactory
+final readonly class InvoiceIdentifierFactory
 {
     public function create(InvoiceIdentifierInterface $input): InvoiceIdentifierInterface
     {
-        $violations = $this->validator->validate($input);
-        if (\count($violations) > 0) {
-            throw new ValidationFailedException($input, $violations);
-        }
-
         return new InvoiceIdentifierDto(
-            issuerId: $this->tt($input->getIssuerId(), 9),
-            invoiceNumber: $this->tt($input->getInvoiceNumber(), 60),
+            issuerId: ContractsValidator::tt($input->getIssuerId(), 9),
+            invoiceNumber: ContractsValidator::tt($input->getInvoiceNumber(), 60),
             issueDate: $input->getIssueDate(),
         );
     }

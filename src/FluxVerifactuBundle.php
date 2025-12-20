@@ -14,7 +14,9 @@ use Symfony\Component\HttpKernel\Bundle\AbstractBundle;
  */
 final class FluxVerifactuBundle extends AbstractBundle
 {
-    public const IS_PROD_ENVIRONMENT_CONFIG_KEY = 'is_prod_environment';
+    public const AEAT_CLIENT_KEY = 'aeat_client';
+    public const COMPUTER_SYSTEM_CONFIG_KEY = 'computer_system';
+    public const FISCAL_IDENTIFIER_CONFIG_KEY = 'fiscal_identifier';
 
     public function configure(DefinitionConfigurator $definition): void
     {
@@ -24,8 +26,10 @@ final class FluxVerifactuBundle extends AbstractBundle
     public function loadExtension(array $config, ContainerConfigurator $container, ContainerBuilder $builder): void
     {
         $container->import('../config/services.php');
-        $builder->getDefinition('flux_verifactu.test_handler')
-            ->setArgument(0, $config[self::IS_PROD_ENVIRONMENT_CONFIG_KEY])
+        $builder->getDefinition('flux_verifactu.aeat_client_handler')
+            ->setArgument(0, $config[self::AEAT_CLIENT_KEY])
+            ->setArgument(1, $config[self::COMPUTER_SYSTEM_CONFIG_KEY])
+            ->setArgument(2, $config[self::FISCAL_IDENTIFIER_CONFIG_KEY])
         ;
     }
 }
