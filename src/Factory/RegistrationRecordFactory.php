@@ -7,20 +7,14 @@ namespace Flux\VerifactuBundle\Factory;
 use Flux\VerifactuBundle\Contract\RegistrationRecordInterface;
 use Flux\VerifactuBundle\Dto\RegistrationRecordDto;
 use josemmo\Verifactu\Models\Records\RegistrationRecord;
-use Symfony\Component\Validator\Exception\ValidationFailedException;
 
-final readonly class RegistrationRecordFactory extends BaseFactory
+final readonly class RegistrationRecordFactory
 {
     private const DEFAULT_COMPUTER_DATE_FORMAT = 'Y-m-d';
     private const DEFAULT_COMPUTER_DATETIME_FORMAT = 'Y-m-d H:i:s';
 
     public function create(RegistrationRecordInterface $input): RegistrationRecordInterface
     {
-        $violations = $this->validator->validate($input);
-        if (\count($violations) > 0) {
-            throw new ValidationFailedException($input, $violations);
-        }
-
         return new RegistrationRecordDto(
             invoiceIdentifier: $input->getInvoiceIdentifier(),
             previousInvoiceIdentifier: $input->getPreviousInvoiceIdentifier(),

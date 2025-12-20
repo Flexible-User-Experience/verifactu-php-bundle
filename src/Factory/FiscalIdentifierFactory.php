@@ -6,21 +6,16 @@ namespace Flux\VerifactuBundle\Factory;
 
 use Flux\VerifactuBundle\Contract\FiscalIdentifierInterface;
 use Flux\VerifactuBundle\Dto\FiscalIdentifierDto;
+use Flux\VerifactuBundle\Validator\ContractsValidator;
 use josemmo\Verifactu\Models\Records\FiscalIdentifier;
-use Symfony\Component\Validator\Exception\ValidationFailedException;
 
-final readonly class FiscalIdentifierFactory extends BaseFactory
+final readonly class FiscalIdentifierFactory
 {
     public function create(FiscalIdentifierInterface $input): FiscalIdentifierInterface
     {
-        $violations = $this->validator->validate($input);
-        if (\count($violations) > 0) {
-            throw new ValidationFailedException($input, $violations);
-        }
-
         return new FiscalIdentifierDto(
-            name: $this->tt($input->getName(), 120),
-            nif: $this->tt($input->getNif(), 9),
+            name: ContractsValidator::tt($input->getName()),
+            nif: ContractsValidator::tt($input->getNif(), 9),
         );
     }
 
