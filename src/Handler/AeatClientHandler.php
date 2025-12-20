@@ -39,7 +39,7 @@ final readonly class AeatClientHandler
             $this->registrationRecordFactory->transformDtoToModel($validatedRegistrationRecord),
         ])->wait();
 
-        return ResponseStatus::Correct === $aeatResponse->status ? 'OK' : 'KO';
+        return ResponseStatus::Correct === $aeatResponse->status ? 'OK' : 'KO'; // TODO handle response content ('OK' => must return a CSV that needs to be stored somewhere)
     }
 
     private function getValidatedRegistrationRecordFromDto(RegistrationRecordInterface $registrationRecord): RegistrationRecordInterface
