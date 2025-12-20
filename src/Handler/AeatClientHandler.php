@@ -9,7 +9,6 @@ use Flux\VerifactuBundle\Contract\FiscalIdentifierInterface;
 use Flux\VerifactuBundle\Contract\RegistrationRecordInterface;
 use Flux\VerifactuBundle\Dto\ComputerSystemDto;
 use Flux\VerifactuBundle\Dto\FiscalIdentifierDto;
-use Flux\VerifactuBundle\Dto\RegistrationRecordDto;
 use Flux\VerifactuBundle\Factory\ComputerSystemFactory;
 use Flux\VerifactuBundle\Factory\FiscalIdentifierFactory;
 use Flux\VerifactuBundle\Factory\RegistrationRecordFactory;
@@ -28,9 +27,9 @@ final readonly class AeatClientHandler
     ) {
     }
 
-    public function getTest(RegistrationRecordDto $dto): string
+    public function getTest(RegistrationRecordInterface $registrationRecord): string
     {
-        $validatedRegistrationRecord = $this->getValidatedRegistrationRecordFromDto($dto);
+        $validatedRegistrationRecord = $this->getValidatedRegistrationRecordFromDto($registrationRecord);
         $validatedComputerSystem = $this->getValidatedComputerSystem();
         $validatedFiscalIdentifier = $this->getValidatedFiscalIdentifier();
         $aeatClient = $this->buildAeatClientWithSystemAndTaxpayer($validatedComputerSystem, $validatedFiscalIdentifier);
@@ -41,9 +40,9 @@ final readonly class AeatClientHandler
         return $aeatResponse->status === ResponseStatus::Correct ? 'OK' : 'KO';
     }
 
-    private function getValidatedRegistrationRecordFromDto(RegistrationRecordDto $dto): RegistrationRecordInterface
+    private function getValidatedRegistrationRecordFromDto(RegistrationRecordInterface $registrationRecord): RegistrationRecordInterface
     {
-        return $this->registrationRecordFactory->create($dto);
+        return $this->registrationRecordFactory->create($registrationRecord);
     }
 
     private function getValidatedComputerSystem(): ComputerSystemInterface
