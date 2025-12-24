@@ -24,7 +24,7 @@ final readonly class AeatClientHandler
     public function sendRegistrationRecord(RegistrationRecordInterface $registrationRecord): string
     {
         $validatedRegistrationRecordDto = $this->registrationRecordFactory->makeValidatedRegistrationRecordDtoFromInterface($registrationRecord);
-        $aeatClient = $this->buildAeatClientWithSystemAndTaxpayer();
+        $aeatClient = $this->buildAeatClient();
         $aeatResponse = $aeatClient->send([
             $this->registrationRecordFactory->makeValidatedRegistrationRecordModelFromDto($validatedRegistrationRecordDto),
         ])->wait();
@@ -32,7 +32,7 @@ final readonly class AeatClientHandler
         return ResponseStatus::Correct === $aeatResponse->status ? 'OK' : 'KO'; // TODO handle response content ('OK' => must return a CSV that needs to be stored somewhere)
     }
 
-    private function buildAeatClientWithSystemAndTaxpayer(): AeatClient
+    private function buildAeatClient(): AeatClient
     {
         $client = new AeatClient(
             $this->computerSystemFactory->makeValidatedComputerSystemModel(),
