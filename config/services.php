@@ -9,6 +9,7 @@ use Flux\VerifactuBundle\Factory\FiscalIdentifierFactory;
 use Flux\VerifactuBundle\Factory\RegistrationRecordFactory;
 use Flux\VerifactuBundle\FluxVerifactuBundle;
 use Flux\VerifactuBundle\Handler\AeatClientHandler;
+use Flux\VerifactuBundle\Transformer\RegistrationRecordTransformer;
 use Flux\VerifactuBundle\Validator\ContractsValidator;
 
 return static function (ContainerConfigurator $container): void {
@@ -28,6 +29,10 @@ return static function (ContainerConfigurator $container): void {
             ->public()
 
         ->set('flux_verifactu.registration_record_factory', RegistrationRecordFactory::class)
+            ->args([
+                service(RegistrationRecordTransformer::class),
+                service(ContractsValidator::class),
+            ])
             ->alias(RegistrationRecordFactory::class, 'flux_verifactu.registration_record_factory')
 
         ->set('flux_verifactu.computer_system_factory', ComputerSystemFactory::class)
@@ -35,6 +40,9 @@ return static function (ContainerConfigurator $container): void {
 
         ->set('flux_verifactu.fiscal_identifier_factory', FiscalIdentifierFactory::class)
             ->alias(FiscalIdentifierFactory::class, 'flux_verifactu.fiscal_identifier_factory')
+
+        ->set('flux_verifactu.registration_record_transformer', RegistrationRecordTransformer::class)
+            ->alias(RegistrationRecordTransformer::class, 'flux_verifactu.registration_record_transformer')
 
         ->set('flux_verifactu.contracts_validator', ContractsValidator::class)
             ->args([
