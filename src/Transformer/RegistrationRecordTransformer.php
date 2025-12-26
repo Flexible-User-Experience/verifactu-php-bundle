@@ -6,6 +6,7 @@ namespace Flux\VerifactuBundle\Transformer;
 
 use Flux\VerifactuBundle\Contract\RegistrationRecordInterface;
 use Flux\VerifactuBundle\Dto\RegistrationRecordDto;
+use josemmo\Verifactu\Models\Records\InvoiceIdentifier;
 use josemmo\Verifactu\Models\Records\RegistrationRecord;
 
 final readonly class RegistrationRecordTransformer extends BaseTransformer
@@ -13,8 +14,8 @@ final readonly class RegistrationRecordTransformer extends BaseTransformer
     public function transformInterfaceToDto(RegistrationRecordInterface $input): RegistrationRecordDto
     {
         return new RegistrationRecordDto(
-            invoiceIdentifier: $input->getInvoiceIdentifier(), // TODO make interface validation before
-            previousInvoiceIdentifier: $input->getPreviousInvoiceIdentifier(), // TODO make interface validation before
+            invoiceIdentifier: $input->getInvoiceIdentifier(),
+            previousInvoiceIdentifier: $input->getPreviousInvoiceIdentifier(),
             previousHash: $input->getPreviousHash(),
             isCorrection: $input->getIsCorrection(),
             isPriorRejection: $input->getIsPriorRejection(),
@@ -34,11 +35,14 @@ final readonly class RegistrationRecordTransformer extends BaseTransformer
         );
     }
 
-    public function transformDtoToModel(RegistrationRecordDto $dto): RegistrationRecord
-    {
+    public function transformDtoToModel(
+        RegistrationRecordDto $dto,
+        InvoiceIdentifier $invoiceIdentifier,
+        ?InvoiceIdentifier $previousInvoiceIdentifier,
+    ): RegistrationRecord {
         $record = new RegistrationRecord();
-        $record->invoiceId = $dto->getInvoiceIdentifier();
-        $record->previousInvoiceId = $dto->getPreviousInvoiceIdentifier();
+        $record->invoiceId = $invoiceIdentifier;
+        $record->previousInvoiceId = $previousInvoiceIdentifier;
         $record->previousHash = $dto->getPreviousHash();
         $record->isCorrection = $dto->getIsCorrection();
         $record->isPriorRejection = $dto->getIsPriorRejection();
