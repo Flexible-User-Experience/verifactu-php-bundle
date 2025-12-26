@@ -1,6 +1,14 @@
 CHANGELOG
 =========
 
+0.1.3
+-----
+ 
+ * Improve AeatClientHandler sendRegistrationRecord method validations
+ * Improve README
+ * Add InvoiceIdentifier transformer
+ * Add TODO
+
 0.1.2
 -----
  
