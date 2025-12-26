@@ -21,8 +21,10 @@ final readonly class ComputerSystemFactory
     public function makeValidatedComputerSystemModel(): ComputerSystem
     {
         $validatedComputerSystemDto = $this->makeValidatedComputerSystemDto();
+        $computerSystemModel = $this->computerSystemTransformer->transformDtoToModel($validatedComputerSystemDto);
+        $computerSystemModel->validate();
 
-        return $this->computerSystemTransformer->transformDtoToModel($validatedComputerSystemDto);
+        return $computerSystemModel;
     }
 
     private function makeValidatedComputerSystemDto(): ComputerSystemDto

@@ -6,18 +6,17 @@ namespace Flux\VerifactuBundle\Transformer;
 
 use Flux\VerifactuBundle\Contract\RegistrationRecordInterface;
 use Flux\VerifactuBundle\Dto\RegistrationRecordDto;
+use josemmo\Verifactu\Models\Records\InvoiceIdentifier;
 use josemmo\Verifactu\Models\Records\RegistrationRecord;
 
 final readonly class RegistrationRecordTransformer extends BaseTransformer
 {
-    public function transformInterfaceToModel(RegistrationRecordInterface $input): RegistrationRecordDto
+    public function transformInterfaceToDto(RegistrationRecordInterface $input): RegistrationRecordDto
     {
         return new RegistrationRecordDto(
             invoiceIdentifier: $input->getInvoiceIdentifier(),
             previousInvoiceIdentifier: $input->getPreviousInvoiceIdentifier(),
             previousHash: $input->getPreviousHash(),
-            hash: $input->getHash(),
-            hashedAt: $input->getHashAt(),
             isCorrection: $input->getIsCorrection(),
             isPriorRejection: $input->getIsPriorRejection(),
             issuerName: $input->getIssuerName(),
@@ -30,25 +29,26 @@ final readonly class RegistrationRecordTransformer extends BaseTransformer
             correctedBaseAmount: $input->getCorrectedBaseAmount(),
             correctedTaxAmount: $input->getCorrectedTaxAmount(),
             replacedInvoices: $input->getReplacedInvoices(),
-            breakdownDetails: $input->getBreakdownDetails(),
+            breakdownDetails: $input->getBreakdownDetails(), // TODO make interface validation before
             totalTaxAmount: $input->getTotalTaxAmount(),
             totalAmount: $input->getTotalAmount(),
         );
     }
 
-    public function transformDtoToModel(RegistrationRecordDto $dto): RegistrationRecord
-    {
+    public function transformDtoToModel(
+        RegistrationRecordDto $dto,
+        InvoiceIdentifier $invoiceIdentifier,
+        ?InvoiceIdentifier $previousInvoiceIdentifier,
+    ): RegistrationRecord {
         $record = new RegistrationRecord();
-        $record->invoiceId = $dto->getInvoiceIdentifier();
-        $record->previousInvoiceId = $dto->getPreviousInvoiceIdentifier();
+        $record->invoiceId = $invoiceIdentifier;
+        $record->previousInvoiceId = $previousInvoiceIdentifier;
         $record->previousHash = $dto->getPreviousHash();
-        $record->hash = $dto->getHash();
-        $record->hashedAt = \DateTimeImmutable::createFromFormat(self::DEFAULT_COMPUTER_DATETIME_FORMAT, $dto->getHashAt()->format(self::DEFAULT_COMPUTER_DATETIME_FORMAT));
         $record->isCorrection = $dto->getIsCorrection();
         $record->isPriorRejection = $dto->getIsPriorRejection();
         $record->issuerName = $dto->getIssuerName();
         $record->invoiceType = $dto->getInvoiceType();
-        $record->operationDate = \DateTimeImmutable::createFromFormat(self::DEFAULT_COMPUTER_DATE_FORMAT, $dto->getOperationDate()?->format(self::DEFAULT_COMPUTER_DATE_FORMAT));
+        $record->operationDate = $dto->getOperationDate() ? BaseTransformer::makeDateTimeImmutableFromDate($dto->getOperationDate()) : null;
         $record->description = $dto->getDescription();
         $record->recipients = $dto->getRecipients();
         $record->correctiveType = $dto->getCorrectiveType();

@@ -4,27 +4,25 @@ declare(strict_types=1);
 
 namespace Flux\VerifactuBundle\Dto;
 
+use Flux\VerifactuBundle\Contract\InvoiceIdentifierInterface;
 use Flux\VerifactuBundle\Contract\RegistrationRecordInterface;
 use josemmo\Verifactu\Models\Records\CorrectiveType;
-use josemmo\Verifactu\Models\Records\InvoiceIdentifier;
 use josemmo\Verifactu\Models\Records\InvoiceType;
 use Symfony\Component\Validator\Constraints as Assert;
 
 final readonly class RegistrationRecordDto implements RegistrationRecordInterface
 {
+    private string $hash;
+    private \DateTimeInterface $hashedAt;
+
     public function __construct(
         #[Assert\NotBlank]
         #[Assert\Valid]
-        private InvoiceIdentifier $invoiceIdentifier,
+        private InvoiceIdentifierInterface $invoiceIdentifier,
         #[Assert\Valid]
-        private ?InvoiceIdentifier $previousInvoiceIdentifier,
+        private ?InvoiceIdentifierInterface $previousInvoiceIdentifier,
         #[Assert\Regex(pattern: '/^[0-9A-F]{64}$/')]
         private ?string $previousHash,
-        #[Assert\NotBlank]
-        #[Assert\Regex(pattern: '/^[0-9A-F]{64}$/')]
-        private string $hash,
-        #[Assert\NotBlank]
-        private \DateTimeInterface $hashedAt,
         #[Assert\NotNull]
         #[Assert\Type('boolean')]
         private bool $isCorrection,
@@ -59,14 +57,16 @@ final readonly class RegistrationRecordDto implements RegistrationRecordInterfac
         #[Assert\Regex(pattern: '/^-?\d{1,12}\.\d{2}$/')]
         private string $totalAmount,
     ) {
+        $this->hash = '';
+        $this->hashedAt = new \DateTimeImmutable();
     }
 
-    public function getInvoiceIdentifier(): InvoiceIdentifier
+    public function getInvoiceIdentifier(): InvoiceIdentifierInterface
     {
         return $this->invoiceIdentifier;
     }
 
-    public function getPreviousInvoiceIdentifier(): ?InvoiceIdentifier
+    public function getPreviousInvoiceIdentifier(): ?InvoiceIdentifierInterface
     {
         return $this->previousInvoiceIdentifier;
     }
