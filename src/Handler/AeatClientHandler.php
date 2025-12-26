@@ -38,7 +38,7 @@ final readonly class AeatClientHandler
             $this->computerSystemFactory->makeValidatedComputerSystemModel(),
             $this->fiscalIdentifierFactory->makeValidatedFiscalIdentifierModel(),
         );
-        $client->setCertificate($this->aeatClientConfig['pfx_certificate_filepath'], $this->aeatClientConfig['pfx_certificate_password']);
+        $client->setCertificate($this->aeatClientConfig['pfx_certificate_filepath'], $this->aeatClientConfig['pfx_certificate_password']); // TODO validate if .pfx certificate file exists
         $client->setProduction($this->aeatClientConfig['is_prod_environment']);
 
         return $client;

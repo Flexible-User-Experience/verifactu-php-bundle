@@ -28,6 +28,11 @@ final readonly class RegistrationRecordFactory
 
     public function makeValidatedRegistrationRecordModelFromDto(RegistrationRecordDto $input): RegistrationRecord
     {
-        return $this->registrationRecordTransformer->transformDtoToModel($input);
+        $registrationRecordModel = $this->registrationRecordTransformer->transformDtoToModel($input);
+        $registrationRecordModel->hashedAt = new \DateTimeImmutable();
+        $registrationRecordModel->hash = $registrationRecordModel->calculateHash();
+        $registrationRecordModel->validate();
+
+        return $registrationRecordModel;
     }
 }
