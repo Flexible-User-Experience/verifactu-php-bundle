@@ -2,11 +2,11 @@ VerifactuBundle
 ===============
 
 VerifactuBundle is Symfony bundle to deal with Veri*Factu Spanish digital
-invoicing law. This bundle relies on `josemmo/verifactu-php` PHP library.
+invoicing law. This bundle relies on `josemmo/verifactu-php` library.
 
 ## Disclaimer
 
-This Symfony bundle is provided without a responsible declaration, as it is **not** an Invoicing Computer System ("Sistema Informático de Facturación" or "SIF" as known reference in Spain's law).
+This Symfony bundle is provided without a responsible declaration, as it is **not** an Invoicing Computer System ("Sistema Informático de Facturación" or "SIF"[^sif] as known reference in Spain's law).
 This is a third-party tool to integrate into your SIF with Veri*Factu API. It is **your responsibility** to audit its code and use it in accordance with the applicable regulations.
 
 For more information, see [Artículo 13 del RD 1007/2023](https://www.boe.es/buscar/act.php?id=BOE-A-2023-24840#a1-5).
@@ -50,19 +50,20 @@ flux_verifactu:
 
 ### `AeatClientHandler` Service (WIP, for now is only a Proof-Of-Concept)
 
-You can inject the `AeatClientHandler` service in your app. Make `sendRegistrationRecordToAeatClient` method calls to send registration records to AEAT API. Your `Invoice` model (or entity) must implement `Flux\VerifactuBundle\Contract\RegistrationRecordInterface`.
+You can inject the `AeatClientHandler` service in your app. Make `sendRegistrationRecord` method calls to send registration records to AEAT API. Your `Invoice` model (or entity) must implement `Flux\VerifactuBundle\Contract\RegistrationRecordInterface`.
 
 ```php
 use Flux\VerifactuBundle\Handler\AeatClientHandler;
 
 class AppTestController
 {
-    public function test(Invoice $invoice, AeatClientHandler $aeatClientHandler)
+    public function test(Invoice $invoice, InvoiceManager $invoiceManager, AeatClientHandler $aeatClientHandler)
     {
-        $registrationRecord = $aeatClientHandler->buildRegistrationRecordDtoFromInterface($invoice);
-        $aeatClientHandler->sendRegistrationRecordToAeatClient($registrationRecord);
+        $registrationRecord = $invoiceManager->transformInvoiceToRegistrationRecordInterface($invoice);
+        // is up to you to create an `InvoiceManager` (or whatever) to transform your Invoice model into a data value object that implements the `RegistrationRecordInterface` contract.
+        $aeatClientHandler->sendRegistrationRecord($registrationRecord);
         // for now this method only returns 'OK' or 'KO' as string (please, keep `aeat_client.is_prod_environment` configuration as `false`)
-        // ...
+        // TODO `AeatClientHandler` must return the CSV[^csv] response
     }
 }
 ```
@@ -87,3 +88,11 @@ Testing
 ```shell
 php ./vendor/bin/phpunit tests/
 ```
+
+---
+
+[^sif]: **SIF** — *Sistema Informático de Facturación*.  
+Certified invoicing software compliant with Spanish tax regulations.
+
+[^csv]: **CSV** — *Código Seguro de Verificación*.  
+Unique verification code returned by the Veri*Factu API to identify a registered invoice.
