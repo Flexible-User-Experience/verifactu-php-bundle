@@ -5,14 +5,13 @@ declare(strict_types=1);
 namespace Flux\VerifactuBundle\Contract;
 
 use josemmo\Verifactu\Models\Records\CorrectiveType;
-use josemmo\Verifactu\Models\Records\InvoiceIdentifier;
 use josemmo\Verifactu\Models\Records\InvoiceType;
 
 interface RegistrationRecordInterface extends ValidatableInterface
 {
-    public function getInvoiceIdentifier(): InvoiceIdentifier;
+    public function getInvoiceIdentifier(): InvoiceIdentifierInterface;
 
-    public function getPreviousInvoiceIdentifier(): ?InvoiceIdentifier;
+    public function getPreviousInvoiceIdentifier(): ?InvoiceIdentifierInterface;
 
     public function getPreviousHash(): ?string;
 
