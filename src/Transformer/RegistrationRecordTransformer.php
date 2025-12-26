@@ -16,8 +16,6 @@ final readonly class RegistrationRecordTransformer extends BaseTransformer
             invoiceIdentifier: $input->getInvoiceIdentifier(), // TODO make interface validation before
             previousInvoiceIdentifier: $input->getPreviousInvoiceIdentifier(), // TODO make interface validation before
             previousHash: $input->getPreviousHash(),
-            hash: $input->getHash(), // TODO must be set before send by wrapped library
-            hashedAt: $input->getHashAt(),
             isCorrection: $input->getIsCorrection(),
             isPriorRejection: $input->getIsPriorRejection(),
             issuerName: $input->getIssuerName(),
@@ -42,8 +40,6 @@ final readonly class RegistrationRecordTransformer extends BaseTransformer
         $record->invoiceId = $dto->getInvoiceIdentifier();
         $record->previousInvoiceId = $dto->getPreviousInvoiceIdentifier();
         $record->previousHash = $dto->getPreviousHash();
-        $record->hash = $dto->getHash();
-        $record->hashedAt = BaseTransformer::makeDateTimeImmutableFromDateTime($dto->getHashAt());
         $record->isCorrection = $dto->getIsCorrection();
         $record->isPriorRejection = $dto->getIsPriorRejection();
         $record->issuerName = $dto->getIssuerName();
