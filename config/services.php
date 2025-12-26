@@ -31,6 +31,7 @@ return static function (ContainerConfigurator $container): void {
 
         ->set('flux_verifactu.registration_record_factory', RegistrationRecordFactory::class)
             ->args([
+                service(InvoiceIdentifierTransformer::class),
                 service(RegistrationRecordTransformer::class),
                 service(ContractsValidator::class),
             ])
