@@ -71,7 +71,7 @@ return static function (ContainerConfigurator $container): void {
             ->args([
                 service(InvoiceIdentifierFactory::class),
                 service(BreakdownDetailTransformer::class),
-                service(FiscalIdentifierTransformer::class),
+                service(FiscalIdentifierFactory::class),
                 service(RegistrationRecordTransformer::class),
                 service(ContractsValidator::class),
             ])

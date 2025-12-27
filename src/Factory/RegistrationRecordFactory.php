@@ -7,7 +7,6 @@ namespace Flux\VerifactuBundle\Factory;
 use Flux\VerifactuBundle\Contract\RegistrationRecordInterface;
 use Flux\VerifactuBundle\Dto\RegistrationRecordDto;
 use Flux\VerifactuBundle\Transformer\BreakdownDetailTransformer;
-use Flux\VerifactuBundle\Transformer\FiscalIdentifierTransformer;
 use Flux\VerifactuBundle\Transformer\RegistrationRecordTransformer;
 use Flux\VerifactuBundle\Validator\ContractsValidator;
 use josemmo\Verifactu\Models\Records\RegistrationRecord;
@@ -17,7 +16,7 @@ final readonly class RegistrationRecordFactory
     public function __construct(
         private InvoiceIdentifierFactory $invoiceIdentifierFactory,
         private BreakdownDetailTransformer $breakdownDetailTransformer,
-        private FiscalIdentifierTransformer $fiscalIdentifierTransformer,
+        private FiscalIdentifierFactory $fiscalIdentifierFactory,
         private RegistrationRecordTransformer $registrationRecordTransformer,
         private ContractsValidator $validator,
     ) {
@@ -38,8 +37,7 @@ final readonly class RegistrationRecordFactory
         }
         // validate recipients interface array
         foreach ($input->getRecipients() as $recipient) {
-            $recipientDto = $this->fiscalIdentifierTransformer->transformInterfaceToDto($recipient);
-            $this->validator->validate($recipientDto);
+            $this->fiscalIdentifierFactory->makeValidatedFiscalIdentifierDtoFromInterface($recipient);
         }
         // validate registrationRecord interface
         $registrationRecordDto = $this->registrationRecordTransformer->transformInterfaceToDto($input);
@@ -64,8 +62,8 @@ final readonly class RegistrationRecordFactory
         }
         $recipients = [];
         foreach ($input->getRecipients() as $recipientInterface) {
-            $recipientDto = $this->fiscalIdentifierTransformer->transformInterfaceToDto($recipientInterface);
-            $recipients[] = $this->fiscalIdentifierTransformer->transformDtoToModel($recipientDto);
+            $recipientDto = $this->fiscalIdentifierFactory->makeValidatedFiscalIdentifierDtoFromInterface($recipientInterface);
+            $recipients[] = $this->fiscalIdentifierFactory->makeValidatedFiscalIdentifierModelFromDto($recipientDto);
         }
         $registrationRecordModel = $this->registrationRecordTransformer->transformDtoToModel(
             dto: $input,
