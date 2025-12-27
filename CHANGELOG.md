@@ -1,6 +1,13 @@
 CHANGELOG
 =========
 
+0.1.4
+-----
+ 
+ * Add more DTO unit tests
+ * Add BreakdownDetail transformer
+ * Add AeatResponse factory
+
 0.1.3
 -----
  
