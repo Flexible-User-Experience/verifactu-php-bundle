@@ -29,7 +29,7 @@ final readonly class RegistrationRecordTransformer extends BaseTransformer
             correctedBaseAmount: $input->getCorrectedBaseAmount(),
             correctedTaxAmount: $input->getCorrectedTaxAmount(),
             replacedInvoices: $input->getReplacedInvoices(),
-            breakdownDetails: $input->getBreakdownDetails(), // TODO make interface validation before
+            breakdownDetails: $input->getBreakdownDetails(),
             totalTaxAmount: $input->getTotalTaxAmount(),
             totalAmount: $input->getTotalAmount(),
         );
@@ -39,6 +39,7 @@ final readonly class RegistrationRecordTransformer extends BaseTransformer
         RegistrationRecordDto $dto,
         InvoiceIdentifier $invoiceIdentifier,
         ?InvoiceIdentifier $previousInvoiceIdentifier,
+        array $breakdownDetails,
     ): RegistrationRecord {
         $record = new RegistrationRecord();
         $record->invoiceId = $invoiceIdentifier;
@@ -56,7 +57,7 @@ final readonly class RegistrationRecordTransformer extends BaseTransformer
         $record->correctedBaseAmount = $dto->getCorrectedBaseAmount();
         $record->correctedTaxAmount = $dto->getCorrectedTaxAmount();
         $record->replacedInvoices = $dto->getReplacedInvoices();
-        $record->breakdown = $dto->getBreakdownDetails();
+        $record->breakdown = $breakdownDetails;
         $record->totalTaxAmount = $dto->getTotalTaxAmount();
         $record->totalAmount = $dto->getTotalAmount();
 

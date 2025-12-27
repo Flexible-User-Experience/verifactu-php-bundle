@@ -32,7 +32,7 @@ final readonly class RegistrationRecordFactory
             $previousInvoiceIdentifierDto = $this->invoiceIdentifierTransformer->transformInterfaceToDto($input->getPreviousInvoiceIdentifier());
             $this->validator->validate($previousInvoiceIdentifierDto);
         }
-        // validate breakdownDetails array interface
+        // validate breakdownDetail interface array
         foreach ($input->getBreakdownDetails() as $breakdownDetail) {
             $breakdownDetailDto = $this->breakdownDetailTransformer->transformInterfaceToDto($breakdownDetail);
             $this->validator->validate($breakdownDetailDto);
@@ -52,10 +52,15 @@ final readonly class RegistrationRecordFactory
             $previousInvoiceIdentifierDto = $this->invoiceIdentifierTransformer->transformInterfaceToDto($input->getPreviousInvoiceIdentifier());
             $previousInvoiceIdentifier = $this->invoiceIdentifierTransformer->transformDtoToModel($previousInvoiceIdentifierDto);
         }
+        $breakdownDetails = [];
+        foreach ($input->getBreakdownDetails() as $breakdownDetailDto) {
+            $breakdownDetails[] = $this->breakdownDetailTransformer->transformDtoToModel($breakdownDetailDto);
+        }
         $registrationRecordModel = $this->registrationRecordTransformer->transformDtoToModel(
             dto: $input,
             invoiceIdentifier: $this->invoiceIdentifierTransformer->transformDtoToModel($invoiceIdentifierDto),
             previousInvoiceIdentifier: $previousInvoiceIdentifier,
+            breakdownDetails: $breakdownDetails,
         );
         $registrationRecordModel->hashedAt = new \DateTimeImmutable();
         $registrationRecordModel->hash = $registrationRecordModel->calculateHash();
