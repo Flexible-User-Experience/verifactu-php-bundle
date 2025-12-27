@@ -63,7 +63,6 @@ return static function (ContainerConfigurator $container): void {
             ->alias(FiscalIdentifierFactory::class, 'flux_verifactu.fiscal_identifier_factory')
         ->set('flux_verifactu.invoice_identifier_factory', InvoiceIdentifierFactory::class)
             ->args([
-                abstract_arg(FluxVerifactuBundle::FISCAL_IDENTIFIER_CONFIG_KEY),
                 service(InvoiceIdentifierTransformer::class),
                 service(ContractsValidator::class),
             ])
