@@ -28,6 +28,7 @@ return static function (ContainerConfigurator $container): void {
                 service(RegistrationRecordFactory::class),
                 service(ComputerSystemFactory::class),
                 service(FiscalIdentifierFactory::class),
+                service(AeatResponseFactory::class),
             ])
             ->alias(AeatClientHandler::class, 'flux_verifactu.aeat_client_handler')
             ->public()
