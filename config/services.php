@@ -19,6 +19,7 @@ use Flux\VerifactuBundle\Transformer\FiscalIdentifierTransformer;
 use Flux\VerifactuBundle\Transformer\InvoiceIdentifierTransformer;
 use Flux\VerifactuBundle\Transformer\RegistrationRecordTransformer;
 use Flux\VerifactuBundle\Validator\ContractsValidator;
+use Symfony\Component\Serializer\SerializerInterface;
 
 return static function (ContainerConfigurator $container): void {
     $services = $container->services();
@@ -78,6 +79,9 @@ return static function (ContainerConfigurator $container): void {
             ->alias(RegistrationRecordFactory::class, 'flux_verifactu.registration_record_factory')
         // transformers
         ->set('flux_verifactu.aeat_response_transformer', AeatResponseTransformer::class)
+            ->args([
+                service(SerializerInterface::class)
+            ])
             ->alias(AeatResponseTransformer::class, 'flux_verifactu.aeat_response_transformer')
         ->set('flux_verifactu.breakdown_detail_transformer', BreakdownDetailTransformer::class)
             ->alias(BreakdownDetailTransformer::class, 'flux_verifactu.breakdown_detail_transformer')
