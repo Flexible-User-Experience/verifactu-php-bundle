@@ -26,6 +26,11 @@ final readonly class AeatResponseFactory
         return $validatedAeatResponseDto;
     }
 
+    public function getJsonArrayFromAeatResponseDto(AeatResponseDto $dto): array
+    {
+        return $this->aeatResponseTransformer->transformDtoToArray($dto);
+    }
+
     public function getJsonStringFromAeatResponseDto(AeatResponseDto $dto): string
     {
         return $this->aeatResponseTransformer->transformDtoToJson($dto);

@@ -35,6 +35,11 @@ final readonly class AeatClientHandler
         return $this->aeatResponseFactory->makeValidatedAeatResponseDtoFromModel($aeatResponse);
     }
 
+    public function getJsonArrayFromAeatResponseDto(AeatResponseDto $dto): array
+    {
+        return $this->aeatResponseFactory->getJsonArrayFromAeatResponseDto($dto);
+    }
+
     public function getJsonStringFromAeatResponseDto(AeatResponseDto $dto): string
     {
         return $this->aeatResponseFactory->getJsonStringFromAeatResponseDto($dto);
