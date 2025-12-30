@@ -12,6 +12,7 @@ use Flux\VerifactuBundle\Factory\InvoiceIdentifierFactory;
 use Flux\VerifactuBundle\Factory\RegistrationRecordFactory;
 use Flux\VerifactuBundle\FluxVerifactuBundle;
 use Flux\VerifactuBundle\Handler\AeatClientHandler;
+use Flux\VerifactuBundle\Handler\QrCodeHandler;
 use Flux\VerifactuBundle\Transformer\AeatResponseTransformer;
 use Flux\VerifactuBundle\Transformer\BreakdownDetailTransformer;
 use Flux\VerifactuBundle\Transformer\ComputerSystemTransformer;
@@ -34,6 +35,12 @@ return static function (ContainerConfigurator $container): void {
                 service(AeatResponseFactory::class),
             ])
             ->alias(AeatClientHandler::class, 'flux_verifactu.aeat_client_handler')
+            ->public()
+        ->set('flux_verifactu.qr_code_handler', QrCodeHandler::class)
+            ->args([
+                service(RegistrationRecordFactory::class),
+            ])
+            ->alias(QrCodeHandler::class, 'flux_verifactu.qr_code_handler')
             ->public()
         // factories
         ->set('flux_verifactu.aeat_response_factory', AeatResponseFactory::class)
