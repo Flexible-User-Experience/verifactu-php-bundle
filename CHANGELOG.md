@@ -1,6 +1,14 @@
 CHANGELOG
 =========
 
+0.1.5
+-----
+ 
+ * Add QrCode handler
+ * Add Json serialization for Aeat responses
+ * Add AeatResponseDto test
+ * Enable Symfony 8.0 compatibility
+
 0.1.4
 -----
  
