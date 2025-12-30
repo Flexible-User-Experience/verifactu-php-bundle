@@ -31,8 +31,7 @@ final readonly class QrCodeHandler
     public function __construct(
         private RegistrationRecordFactory $registrationRecordFactory,
         private AeatResponseFactory $aeatResponseFactory,
-    )
-    {
+    ) {
         $this->qrGenerator = new QrGenerator();
     }
 
@@ -54,7 +53,7 @@ final readonly class QrCodeHandler
      */
     public function buildQrCodeAsPngImageFromRegistrationRecordAndAeatResponseDto(RegistrationRecordDto $registrationRecordDto, AeatResponseDto $aeatResponseDto): ResultInterface
     {
-        if ($aeatResponseDto->getStatus() === ResponseStatus::Incorrect) {
+        if (ResponseStatus::Incorrect === $aeatResponseDto->getStatus()) {
             throw new \RuntimeException('AEAT response status can not be incorrect');
         }
         if (is_null($aeatResponseDto->getCsv())) {
