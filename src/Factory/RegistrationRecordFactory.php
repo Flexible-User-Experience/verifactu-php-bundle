@@ -6,9 +6,6 @@ namespace Flux\VerifactuBundle\Factory;
 
 use Flux\VerifactuBundle\Contract\RegistrationRecordInterface;
 use Flux\VerifactuBundle\Dto\RegistrationRecordDto;
-use Flux\VerifactuBundle\Transformer\BreakdownDetailTransformer;
-use Flux\VerifactuBundle\Transformer\FiscalIdentifierTransformer;
-use Flux\VerifactuBundle\Transformer\InvoiceIdentifierTransformer;
 use Flux\VerifactuBundle\Transformer\RegistrationRecordTransformer;
 use Flux\VerifactuBundle\Validator\ContractsValidator;
 use josemmo\Verifactu\Models\Records\RegistrationRecord;
@@ -16,9 +13,9 @@ use josemmo\Verifactu\Models\Records\RegistrationRecord;
 final readonly class RegistrationRecordFactory
 {
     public function __construct(
-        private InvoiceIdentifierTransformer $invoiceIdentifierTransformer,
-        private BreakdownDetailTransformer $breakdownDetailTransformer,
-        private FiscalIdentifierTransformer $fiscalIdentifierTransformer,
+        private InvoiceIdentifierFactory $invoiceIdentifierFactory,
+        private BreakdownDetailFactory $breakdownDetailFactory,
+        private FiscalIdentifierFactory $fiscalIdentifierFactory,
         private RegistrationRecordTransformer $registrationRecordTransformer,
         private ContractsValidator $validator,
     ) {
@@ -27,22 +24,18 @@ final readonly class RegistrationRecordFactory
     public function makeValidatedRegistrationRecordDtoFromInterface(RegistrationRecordInterface $input): RegistrationRecordDto
     {
         // validate invoiceIdentifier interface
-        $invoiceIdentifierDto = $this->invoiceIdentifierTransformer->transformInterfaceToDto($input->getInvoiceIdentifier());
-        $this->validator->validate($invoiceIdentifierDto);
+        $this->invoiceIdentifierFactory->makeValidatedInvoiceIdentifierDtoFromInterface($input->getInvoiceIdentifier());
         // validate (if exists) previousInvoiceIdentifier interface
         if ($input->getPreviousInvoiceIdentifier()) {
-            $previousInvoiceIdentifierDto = $this->invoiceIdentifierTransformer->transformInterfaceToDto($input->getPreviousInvoiceIdentifier());
-            $this->validator->validate($previousInvoiceIdentifierDto);
+            $this->invoiceIdentifierFactory->makeValidatedInvoiceIdentifierDtoFromInterface($input->getPreviousInvoiceIdentifier());
         }
         // validate breakdownDetail interface array
         foreach ($input->getBreakdownDetails() as $breakdownDetail) {
-            $breakdownDetailDto = $this->breakdownDetailTransformer->transformInterfaceToDto($breakdownDetail);
-            $this->validator->validate($breakdownDetailDto);
+            $this->breakdownDetailFactory->makeValidatedBreakdownDetailDtoFromInterface($breakdownDetail);
         }
         // validate recipients interface array
         foreach ($input->getRecipients() as $recipient) {
-            $recipientDto = $this->fiscalIdentifierTransformer->transformInterfaceToDto($recipient);
-            $this->validator->validate($recipientDto);
+            $this->fiscalIdentifierFactory->makeValidatedFiscalIdentifierDtoFromInterface($recipient);
         }
         // validate registrationRecord interface
         $registrationRecordDto = $this->registrationRecordTransformer->transformInterfaceToDto($input);
@@ -53,25 +46,26 @@ final readonly class RegistrationRecordFactory
 
     public function makeValidatedRegistrationRecordModelFromDto(RegistrationRecordDto $input): RegistrationRecord
     {
-        $invoiceIdentifierDto = $this->invoiceIdentifierTransformer->transformInterfaceToDto($input->getInvoiceIdentifier());
+        $invoiceIdentifierDto = $this->invoiceIdentifierFactory->makeValidatedInvoiceIdentifierDtoFromInterface($input->getInvoiceIdentifier());
+        $invoiceIdentifier = $this->invoiceIdentifierFactory->makeValidatedRegistrationRecordModelFromDto($invoiceIdentifierDto);
         $previousInvoiceIdentifier = null;
         if ($input->getPreviousInvoiceIdentifier()) {
-            $previousInvoiceIdentifierDto = $this->invoiceIdentifierTransformer->transformInterfaceToDto($input->getPreviousInvoiceIdentifier());
-            $previousInvoiceIdentifier = $this->invoiceIdentifierTransformer->transformDtoToModel($previousInvoiceIdentifierDto);
+            $previousInvoiceIdentifierDto = $this->invoiceIdentifierFactory->makeValidatedInvoiceIdentifierDtoFromInterface($input->getPreviousInvoiceIdentifier());
+            $previousInvoiceIdentifier = $this->invoiceIdentifierFactory->makeValidatedRegistrationRecordModelFromDto($previousInvoiceIdentifierDto);
         }
         $breakdownDetails = [];
         foreach ($input->getBreakdownDetails() as $breakdownDetailInterface) {
-            $breakdownDetailDto = $this->breakdownDetailTransformer->transformInterfaceToDto($breakdownDetailInterface);
-            $breakdownDetails[] = $this->breakdownDetailTransformer->transformDtoToModel($breakdownDetailDto);
+            $breakdownDetailDto = $this->breakdownDetailFactory->makeValidatedBreakdownDetailDtoFromInterface($breakdownDetailInterface);
+            $breakdownDetails[] = $this->breakdownDetailFactory->makeValidatedBreakdownDetailModelFromDto($breakdownDetailDto);
         }
         $recipients = [];
         foreach ($input->getRecipients() as $recipientInterface) {
-            $recipientDto = $this->fiscalIdentifierTransformer->transformInterfaceToDto($recipientInterface);
-            $recipients[] = $this->fiscalIdentifierTransformer->transformDtoToModel($recipientDto);
+            $recipientDto = $this->fiscalIdentifierFactory->makeValidatedFiscalIdentifierDtoFromInterface($recipientInterface);
+            $recipients[] = $this->fiscalIdentifierFactory->makeValidatedFiscalIdentifierModelFromDto($recipientDto);
         }
         $registrationRecordModel = $this->registrationRecordTransformer->transformDtoToModel(
             dto: $input,
-            invoiceIdentifier: $this->invoiceIdentifierTransformer->transformDtoToModel($invoiceIdentifierDto),
+            invoiceIdentifier: $invoiceIdentifier,
             previousInvoiceIdentifier: $previousInvoiceIdentifier,
             breakdownDetails: $breakdownDetails,
             recipients: $recipients,

@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Flux\VerifactuBundle\Handler;
 
+use Flux\VerifactuBundle\Contract\AeatResponseInterface;
 use Flux\VerifactuBundle\Contract\RegistrationRecordInterface;
 use Flux\VerifactuBundle\Dto\AeatResponseDto;
 use Flux\VerifactuBundle\Factory\AeatResponseFactory;
@@ -23,7 +24,7 @@ final readonly class AeatClientHandler
     ) {
     }
 
-    public function sendRegistrationRecord(RegistrationRecordInterface $registrationRecord): AeatResponseDto
+    public function sendRegistrationRecord(RegistrationRecordInterface $registrationRecord): AeatResponseInterface
     {
         $validatedRegistrationRecordDto = $this->registrationRecordFactory->makeValidatedRegistrationRecordDtoFromInterface($registrationRecord);
         $aeatClient = $this->buildAeatClient();
@@ -34,13 +35,18 @@ final readonly class AeatClientHandler
         return $this->aeatResponseFactory->makeValidatedAeatResponseDtoFromModel($aeatResponse);
     }
 
+    public function getJsonStringFromAeatResponseDto(AeatResponseDto $dto): string
+    {
+        return $this->aeatResponseFactory->getJsonStringFromAeatResponseDto($dto);
+    }
+
     private function buildAeatClient(): AeatClient
     {
         $client = new AeatClient(
             $this->computerSystemFactory->makeValidatedComputerSystemModel(),
             $this->fiscalIdentifierFactory->makeValidatedFiscalIdentifierModel(),
         );
-        $client->setCertificate($this->aeatClientConfig['pfx_certificate_filepath'], $this->aeatClientConfig['pfx_certificate_password']); // TODO validate if .pfx certificate file exists
+        $client->setCertificate($this->aeatClientConfig['pfx_certificate_filepath'], $this->aeatClientConfig['pfx_certificate_password']);
         $client->setProduction($this->aeatClientConfig['is_prod_environment']);
 
         return $client;

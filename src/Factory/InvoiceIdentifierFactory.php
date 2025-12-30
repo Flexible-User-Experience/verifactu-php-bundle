@@ -18,7 +18,7 @@ final readonly class InvoiceIdentifierFactory
     ) {
     }
 
-    public function makeInvoiceIdentifierDtoFromInterface(InvoiceIdentifierInterface $input): InvoiceIdentifierDto
+    public function makeValidatedInvoiceIdentifierDtoFromInterface(InvoiceIdentifierInterface $input): InvoiceIdentifierDto
     {
         $invoiceIdentifierDto = $this->invoiceIdentifierTransformer->transformInterfaceToDto($input);
         $this->validator->validate($invoiceIdentifierDto);

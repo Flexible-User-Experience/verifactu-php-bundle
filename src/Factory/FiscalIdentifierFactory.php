@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Flux\VerifactuBundle\Factory;
 
+use Flux\VerifactuBundle\Contract\FiscalIdentifierInterface;
 use Flux\VerifactuBundle\Dto\FiscalIdentifierDto;
 use Flux\VerifactuBundle\Transformer\FiscalIdentifierTransformer;
 use Flux\VerifactuBundle\Validator\ContractsValidator;
@@ -16,6 +17,22 @@ final readonly class FiscalIdentifierFactory
         private FiscalIdentifierTransformer $fiscalIdentifierTransformer,
         private ContractsValidator $validator,
     ) {
+    }
+
+    public function makeValidatedFiscalIdentifierDtoFromInterface(FiscalIdentifierInterface $input): FiscalIdentifierDto
+    {
+        $fiscalIdentifierDto = $this->fiscalIdentifierTransformer->transformInterfaceToDto($input);
+        $this->validator->validate($fiscalIdentifierDto);
+
+        return $fiscalIdentifierDto;
+    }
+
+    public function makeValidatedFiscalIdentifierModelFromDto(FiscalIdentifierDto $dto): FiscalIdentifier
+    {
+        $fiscalIdentifierModel = $this->fiscalIdentifierTransformer->transformDtoToModel($dto);
+        $fiscalIdentifierModel->validate();
+
+        return $fiscalIdentifierModel;
     }
 
     public function makeValidatedFiscalIdentifierModel(): FiscalIdentifier
