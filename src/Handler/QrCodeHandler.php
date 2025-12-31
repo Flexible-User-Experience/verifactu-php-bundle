@@ -8,6 +8,7 @@ use Endroid\QrCode\Color\Color;
 use Endroid\QrCode\Encoding\Encoding;
 use Endroid\QrCode\ErrorCorrectionLevel;
 use Endroid\QrCode\Exception\ValidationException;
+use Endroid\QrCode\Label\Font\OpenSans;
 use Endroid\QrCode\Label\Label;
 use Endroid\QrCode\Label\LabelAlignment;
 use Endroid\QrCode\QrCode;
@@ -73,12 +74,16 @@ final readonly class QrCodeHandler
         );
         $label = new Label(
             text: self::QR_CODE_VERI_FACTU_LABEL,
+            font: new OpenSans(size: 26),
             alignment: LabelAlignment::Center,
             textColor: new Color(0, 0, 0)
         );
         $result = $writer->write(
             qrCode: $qrCode,
-            label: $label
+            label: $label,
+            options: [
+                PngWriter::WRITER_OPTION_COMPRESSION_LEVEL => 0,
+            ]
         );
         $writer->validateResult($result, $qrCodeUrlData);
 
