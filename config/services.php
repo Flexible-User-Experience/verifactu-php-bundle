@@ -38,6 +38,7 @@ return static function (ContainerConfigurator $container): void {
             ->public()
         ->set('flux_verifactu.qr_code_handler', QrCodeHandler::class)
             ->args([
+                abstract_arg(FluxVerifactuBundle::AEAT_CLIENT_KEY),
                 service(RegistrationRecordFactory::class),
                 service(AeatResponseFactory::class),
             ])

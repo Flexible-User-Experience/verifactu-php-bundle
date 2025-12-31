@@ -31,6 +31,9 @@ final class FluxVerifactuBundle extends AbstractBundle
         $builder->getDefinition('flux_verifactu.aeat_client_handler')
             ->setArgument(0, $config[self::AEAT_CLIENT_KEY])
         ;
+        $builder->getDefinition('flux_verifactu.qr_code_handler')
+            ->setArgument(0, $config[self::AEAT_CLIENT_KEY])
+        ;
         $builder->getDefinition('flux_verifactu.computer_system_factory')
             ->setArgument(0, $config[self::COMPUTER_SYSTEM_CONFIG_KEY])
         ;

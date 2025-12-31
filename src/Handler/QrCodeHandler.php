@@ -32,10 +32,12 @@ final readonly class QrCodeHandler
     private QrGenerator $qrGenerator;
 
     public function __construct(
+        private array $aeatClientConfig,
         private RegistrationRecordFactory $registrationRecordFactory,
         private AeatResponseFactory $aeatResponseFactory,
     ) {
         $this->qrGenerator = new QrGenerator();
+        $this->qrGenerator->setProduction($this->aeatClientConfig['is_prod_environment']);
     }
 
     /**
