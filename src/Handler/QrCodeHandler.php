@@ -11,6 +11,7 @@ use Endroid\QrCode\Exception\ValidationException;
 use Endroid\QrCode\Label\Font\OpenSans;
 use Endroid\QrCode\Label\Label;
 use Endroid\QrCode\Label\LabelAlignment;
+use Endroid\QrCode\Label\Margin\Margin;
 use Endroid\QrCode\QrCode;
 use Endroid\QrCode\RoundBlockSizeMode;
 use Endroid\QrCode\Writer\PngWriter;
@@ -75,8 +76,9 @@ final readonly class QrCodeHandler
         );
         $label = new Label(
             text: self::QR_CODE_VERI_FACTU_LEGAL_LABEL,
-            font: new OpenSans(size: 56),
+            font: new OpenSans(size: 96),
             alignment: LabelAlignment::Center,
+            margin: new Margin(0, 0, 0, 0),
             textColor: new Color(0, 0, 0)
         );
         $result = $writer->write(
