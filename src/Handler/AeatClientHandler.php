@@ -24,15 +24,25 @@ final readonly class AeatClientHandler
     ) {
     }
 
-    public function sendRegistrationRecord(RegistrationRecordInterface $registrationRecord): AeatResponseInterface
+    public function sendRegistrationRecord(RegistrationRecordInterface $registrationRecordInterface): AeatResponseInterface
     {
-        $validatedRegistrationRecordDto = $this->registrationRecordFactory->makeValidatedRegistrationRecordDtoFromInterface($registrationRecord);
         $aeatClient = $this->buildAeatClient();
+        $validatedRegistrationRecordDto = $this->registrationRecordFactory->makeValidatedRegistrationRecordDtoFromInterface($registrationRecordInterface);
+        $validatedRegistrationRecordModel = $this->registrationRecordFactory->makeValidatedRegistrationRecordModelFromDto($validatedRegistrationRecordDto);
         $aeatResponse = $aeatClient->send([
-            $this->registrationRecordFactory->makeValidatedRegistrationRecordModelFromDto($validatedRegistrationRecordDto),
+            $validatedRegistrationRecordModel,
         ])->wait();
+        $registrationRecordInterface
+            ->setHash($validatedRegistrationRecordModel->hash)
+            ->setHashedAt($validatedRegistrationRecordModel->hashedAt)
+        ;
 
         return $this->aeatResponseFactory->makeValidatedAeatResponseDtoFromModel($aeatResponse);
+    }
+
+    public function getJsonArrayFromAeatResponseDto(AeatResponseDto $dto): array
+    {
+        return $this->aeatResponseFactory->getJsonArrayFromAeatResponseDto($dto);
     }
 
     public function getJsonStringFromAeatResponseDto(AeatResponseDto $dto): string

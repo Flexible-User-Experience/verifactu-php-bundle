@@ -1,6 +1,14 @@
 CHANGELOG
 =========
 
+0.1.6
+-----
+ 
+ * Add QrCode validation
+ * Apply AEAT QR recommendations for dimensions & error correction level
+ * Manage `hash` & `hashedAt` attributes update during `AeatClientHandler` sendRegistrationRecord method call
+ * Improve README documentation
+
 0.1.5
 -----
  
