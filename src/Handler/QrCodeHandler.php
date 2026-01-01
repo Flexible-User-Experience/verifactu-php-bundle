@@ -70,8 +70,8 @@ final readonly class QrCodeHandler
             data: $qrCodeUrlData,
             encoding: new Encoding('UTF-8'),
             errorCorrectionLevel: ErrorCorrectionLevel::Medium,
-            size: 745,
-            margin: 100,
+            size: 850,
+            margin: 48,
             roundBlockSizeMode: RoundBlockSizeMode::Margin,
             foregroundColor: new Color(0, 0, 0),
             backgroundColor: new Color(255, 255, 255)
@@ -80,7 +80,7 @@ final readonly class QrCodeHandler
             text: self::QR_CODE_VERI_FACTU_LEGAL_LABEL,
             font: new OpenSans(size: 96),
             alignment: LabelAlignment::Center,
-            margin: new Margin(0, 0, 20, 0),
+            margin: new Margin(0, 0, 24, 0),
             textColor: new Color(0, 0, 0)
         );
         $result = $writer->write(
