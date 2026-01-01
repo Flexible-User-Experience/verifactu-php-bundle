@@ -1,7 +1,7 @@
 VerifactuBundle
 ===============
 
-VerifactuBundle is a Symfony bundle to deal with Veri*Factu Spanish digital invoicing law. This bundle relies on `josemmo/verifactu-php` library to send your invoices to the AEAT[^aeat] Veri*Factu API.
+VerifactuBundle is a Symfony bundle to deal with Veri\*Factu Spanish digital invoicing law. This bundle relies on `josemmo/verifactu-php` library to send your invoices to the AEAT[^aeat] Veri\*Factu API.
 
 This bundle also can generate legal QR validation codes as PNG image to include into your printed invoices.
 
@@ -9,7 +9,7 @@ This bundle also can generate legal QR validation codes as PNG image to include 
 
 This Symfony bundle is provided without a responsible declaration, as it is **not** an Invoicing Computer System ("Sistema Informático de Facturación" or "SIF"[^sif] as known reference in Spain's law).
 
-This is a third-party tool to integrate your SIF[^sif] with the Veri*Factu API to comply with the Spanish state government's anti-fraud law. It is **your responsibility** to audit its code and use it in accordance with the applicable regulations.
+This is a third-party tool to integrate your SIF[^sif] with the Veri\*Factu API to comply with the Spanish state government's anti-fraud law. It is **your responsibility** to audit its code and use it in accordance with the applicable regulations.
 
 For more information, see [Artículo 13 del RD 1007/2023](https://www.boe.es/buscar/act.php?id=BOE-A-2023-24840#a1-5).
 
@@ -71,7 +71,7 @@ class AppTestController
         $result = $aeatClientHandler->sendRegistrationRecord($registrationRecord);
         // $result is an `AeatResponseInterface` contract, you must check the response status received and manage it accordingly.
         // you must decide what to do with the response status, and check $result->getStatus() against ResponseStatus::Correct, ResponseStatus::PartiallyCorrect or ResponseStatus::Incorrect possible values 
-        // you must read Veri*Factu documentation to handle Invoice integrity and traceability, this is out of the scope of this bundle! 
+        // you must read Veri\*Factu documentation to handle Invoice integrity and traceability, this is out of the scope of this bundle! 
         $aeatJsonArrayResponse = $aeatClientHandler->getJsonArrayFromAeatResponseDto($result);
         // we recommend you to always store the result array or a JSON serialized version into your Invoice entity
         $invoice->setAeatJsonResponse($aeatJsonArrayResponse);
@@ -128,4 +128,4 @@ Is the tax identification number used by the Spanish Tax Agency to identify indi
 Is the tax identification number used by the Spanish Tax Agency to identify companies or enterprises entities for tax purposes.
 
 [^csv]: **CSV** — *Código Seguro de Verificación*.  
-Unique verification code returned by the Veri*Factu API to identify a registered invoice.
+Unique verification code returned by the Veri\*Factu API to identify a registered invoice.
